@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net"
 	"time"
+	"log"
 )
 
 type Config struct {
@@ -59,7 +60,11 @@ func (s *Service) Fetch(req *Request, resp *Response) error {
 	httpReq.Header = req.Headers
 	httpReq.Close = false
 
+	now := time.Now()
+
 	httpResp, err := s.client.Do(httpReq)
+
+	log.Printf("Fetched %s %q in %v\n", req.Method, req.Url, time.Now().Sub(now))
 
 	if err != nil {
 		return err
